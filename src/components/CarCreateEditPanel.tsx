@@ -1,7 +1,10 @@
 import CarForm from './CarForm';
+import { useAppStore } from '../store/appStore';
 
 function CarCreateEditPanel() {
+  const { createCar } = useAppStore((state) => state);
   const handleCreate = (text: string, color: string) => {
+    createCar({ name: text, color });
     console.log('Create car:', text, color);
   };
 
@@ -13,13 +16,13 @@ function CarCreateEditPanel() {
     <div className="flex gap-4">
       <CarForm
         initTextValue=""
-        initColorValue="#000000"
+        initColorValue="#ffffff"
         btnName="Create"
         onSubmit={handleCreate}
       />
       <CarForm
         initTextValue=""
-        initColorValue="#000000"
+        initColorValue="#ffffff"
         btnName="Update"
         onSubmit={handleUpdate}
       />

@@ -15,3 +15,15 @@ export async function fetchCars(
 
   return { cars, total };
 }
+
+export async function createCarApi(
+  car: Pick<Car, 'name' | 'color'>
+): Promise<Car> {
+  const response = await fetch(`${DOMAIN}/garage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(car),
+  });
+
+  return response.json();
+}

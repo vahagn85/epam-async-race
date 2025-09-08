@@ -1,5 +1,5 @@
 import type { StateCreator } from 'zustand';
-import { fetchCars } from '../../api/garage';
+import { createCarApi, fetchCars } from '../../api/garage';
 import type { Car } from '../../types';
 
 export interface garageSlice {
@@ -8,8 +8,9 @@ export interface garageSlice {
   total: number;
   error: string | null;
   getCars: () => Promise<void>;
+  createCar: (_car: Pick<Car, 'name' | 'color'>) => Promise<void>;
 }
-export const createGarageSlice: StateCreator<garageSlice> = (set) => ({
+export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
   page: 1,
   cars: [],
   total: 0,
@@ -19,6 +20,16 @@ export const createGarageSlice: StateCreator<garageSlice> = (set) => ({
     try {
       const { cars, total } = await fetchCars();
       set({ cars, total });
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Unexpected error',
+      });
+    }
+  },
+  createCar: async (car) => {
+    try {
+      const data = await createCarApi(car);
+      set({ cars: [...get().cars, data], total: get().total + 1 });
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Unexpected error',
