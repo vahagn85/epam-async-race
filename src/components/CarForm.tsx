@@ -5,12 +5,13 @@ import Button from './ui/Button';
 interface CarFormProps {
   initTextValue: string;
   initColorValue: string;
+  disabled?: boolean;
   btnName: 'Create' | 'Update';
   onSubmit: (_text: string, _color: string) => void;
 }
 
 function CarForm(props: CarFormProps) {
-  const { initTextValue, initColorValue, btnName, onSubmit } = props;
+  const { initTextValue, initColorValue, btnName, disabled, onSubmit } = props;
   const [text, setText] = useState(initTextValue);
   const [color, setColor] = useState(initColorValue);
 
@@ -21,10 +22,15 @@ function CarForm(props: CarFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-1 items-center">
-      <Input type="text" value={text} onChange={setText} />
-      <Input type="color" value={color} onChange={setColor} />
+      <Input type="text" value={text} onChange={setText} disabled={disabled} />
+      <Input
+        type="color"
+        value={color}
+        onChange={setColor}
+        disabled={disabled}
+      />
 
-      <Button name={btnName} />
+      <Button name={btnName} disabled={disabled} />
     </form>
   );
 }

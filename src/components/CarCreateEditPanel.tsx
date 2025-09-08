@@ -2,14 +2,13 @@ import CarForm from './CarForm';
 import { useAppStore } from '../store/appStore';
 
 function CarCreateEditPanel() {
-  const { createCar } = useAppStore((state) => state);
+  const { createCar, selectedCar } = useAppStore((state) => state);
   const handleCreate = (text: string, color: string) => {
     createCar({ name: text, color });
-    console.log('Create car:', text, color);
   };
 
   const handleUpdate = (text: string, color: string) => {
-    console.log('Update car:', text, color);
+    console.log('Update car:', text, color, selectedCar);
   };
 
   return (
@@ -21,10 +20,12 @@ function CarCreateEditPanel() {
         onSubmit={handleCreate}
       />
       <CarForm
-        initTextValue=""
-        initColorValue="#ffffff"
+        key={selectedCar?.id || 'new'}
+        initTextValue={selectedCar?.name || ''}
+        initColorValue={selectedCar?.color || '#ffffff'}
         btnName="Update"
         onSubmit={handleUpdate}
+        disabled={!selectedCar}
       />
     </div>
   );

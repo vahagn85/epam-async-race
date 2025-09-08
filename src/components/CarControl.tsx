@@ -2,7 +2,7 @@ import { useAppStore } from '../store/appStore';
 import Button from './ui/Button';
 
 function CarControl({ id }: { id: number }) {
-  const { deleteCar } = useAppStore((state) => state);
+  const { deleteCar, selectCar } = useAppStore((state) => state);
 
   return (
     <div className="flex items-center gap-2 p-2 w-27 text-xs">
@@ -10,6 +10,7 @@ function CarControl({ id }: { id: number }) {
         <Button
           className="!px-2 !py-1 bg-cyan-700 hover:bg-cyan-600"
           name="Select"
+          onClick={() => selectCar(id)}
         />
         <Button
           className="!px-2 !py-1 bg-pink-700 hover:bg-pink-600"

@@ -16,6 +16,7 @@ export async function getCarsHandle(set: Set) {
     });
   }
 }
+
 export async function createCarHandle(
   car: Pick<Car, 'name' | 'color'>,
   get: Get,
@@ -30,6 +31,7 @@ export async function createCarHandle(
     });
   }
 }
+
 export async function deleteCarHandle(id: number, get: Get, set: Set) {
   try {
     const data = await deleteCarApi(id);
@@ -37,6 +39,7 @@ export async function deleteCarHandle(id: number, get: Get, set: Set) {
       set({
         cars: get().cars.filter((car) => car.id !== id),
         total: get().total - 1,
+        selectedCar: null,
       });
     }
   } catch (error) {
@@ -44,4 +47,8 @@ export async function deleteCarHandle(id: number, get: Get, set: Set) {
       error: error instanceof Error ? error.message : 'Unexpected error',
     });
   }
+}
+
+export async function selectCarHandle(id: number, get: Get, set: Set) {
+  set({ selectedCar: get().cars.find((car) => car.id === id) });
 }
