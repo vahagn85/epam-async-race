@@ -7,7 +7,7 @@ function RaceTrack() {
   return (
     <div className="w-full bg-gray-800 flex flex-col mt-8">
       {cars.map((car) => (
-        <TrackRow key={car.id} name={car.name} color={car.color} />
+        <TrackRow key={car.id} name={car.name} color={car.color} id={car.id} />
       ))}
     </div>
   );

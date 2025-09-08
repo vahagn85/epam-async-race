@@ -4,12 +4,13 @@ import CarControl from './CarControl';
 interface TrackRowProps {
   name: string;
   color: string;
+  id: number;
 }
 
-function TrackRow({ name, color }: TrackRowProps) {
+function TrackRow({ name, color, id }: TrackRowProps) {
   return (
     <div className="flex items-center border-t border-gray-500 relative">
-      <CarControl />
+      <CarControl id={id} />
       <div className="flex items-center justify-center w-20">
         <CarIcon color={color} />
       </div>

@@ -27,3 +27,21 @@ export async function createCarApi(
 
   return response.json();
 }
+
+export async function deleteCarApi(id: number): Promise<object | string> {
+  try {
+    if (!id) {
+      throw new Error('ID is required');
+    }
+    const response = await fetch(`${DOMAIN}/garage/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`Failed id:${id}`);
+    }
+
+    return 'success';
+  } catch {
+    return 'error';
+  }
+}
