@@ -4,6 +4,7 @@ interface InputProps {
   placeholder?: string;
   onChange?: (_value: string) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 function Input(props: InputProps) {
@@ -13,13 +14,15 @@ function Input(props: InputProps) {
     placeholder = 'TYPE CAR BRAND',
     onChange,
     className,
+    disabled,
   } = props;
 
   return (
     <input
       type={type}
       placeholder={placeholder}
-      className={`flex-auto p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ''}`}
+      disabled={disabled}
+      className={`flex-auto p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ''} ${disabled ? 'opacity-50 cursor-not-allowed disabled:bg-gray-200' : ''}`}
       value={value}
       onChange={(e) => onChange?.(e.target.value)}
     />

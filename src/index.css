@@ -7,3 +7,8 @@ input[type='color'] {
   border: none;
   cursor: pointer;
 }
+
+input[type='color']:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
