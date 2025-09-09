@@ -2,7 +2,15 @@ import { useAppStore } from '../store/appStore';
 import Button from './ui/Button';
 
 function CarControl({ id }: { id: number }) {
-  const { deleteCar, selectCar } = useAppStore((state) => state);
+  const { deleteCar, selectCar, resetCar, startCar } = useAppStore();
+
+  const handleStart = async () => {
+    startCar(id);
+  };
+
+  const handleStop = async () => {
+    resetCar(id);
+  };
 
   return (
     <div className="flex items-center gap-2 p-2 w-27 text-xs">
@@ -19,8 +27,16 @@ function CarControl({ id }: { id: number }) {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Button className="w-6 h-6 !p-1 bg-yellow-600" name="A" />
-        <Button className="w-6 h-6 !p-1 bg-gray-600" name="B" />
+        <Button
+          className="w-6 h-6 !p-1 bg-yellow-600"
+          name="A"
+          onClick={handleStart}
+        />
+        <Button
+          className="w-6 h-6 !p-1 bg-gray-600"
+          name="B"
+          onClick={handleStop}
+        />
       </div>
     </div>
   );

@@ -8,7 +8,9 @@ import {
   updateCarApi,
 } from '../../api/garage';
 import { generateCar } from '../../utils/generateCar';
-import { RANDOM_CARS_COUNT } from '../../constant';
+import { CAR_PADDING, RANDOM_CARS_COUNT } from '../../constant';
+import { carEngine } from '../../api/engine';
+import { getCarDistanceFromDOM } from './../../utils/getDistance';
 
 type Get = StoreApi<AppStoreState>['getState'];
 type Set = StoreApi<AppStoreState>['setState'];
@@ -80,4 +82,43 @@ export async function generateCarsHandle(get: Get) {
     get().createCar(generateCar())
   );
   await Promise.all(promises);
+}
+
+export async function startCarHandle(id: number, get: Get) {
+  try {
+    const startData = await carEngine(id, 'started');
+    if (!startData || !('velocity' in startData)) return;
+
+    const { velocity, distance: serverDistance } = startData;
+
+    const timeMs = serverDistance / velocity;
+
+    get().updateCarPosition(id, {
+      distance: get().trackDistance,
+      time: timeMs,
+    });
+
+    const driveData = await carEngine(id, 'drive');
+    if (!driveData || !('success' in driveData)) {
+      const currentDistance = getCarDistanceFromDOM(id);
+      if (currentDistance) {
+        get().stopCar(id, currentDistance + CAR_PADDING);
+      }
+    }
+  } catch {
+    get().stopCar(id);
+  }
+}
+
+export async function resetCarHandle(id: number, get: Get, set: Set) {
+  try {
+    await carEngine(id, 'stopped');
+    set((state) => ({
+      cars: state.cars.map((car) =>
+        car.id === id ? { ...car, distance: 0, time: 0 } : car
+      ),
+    }));
+  } catch {
+    get().stopCar(id);
+  }
 }

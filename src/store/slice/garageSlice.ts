@@ -5,7 +5,9 @@ import {
   deleteCarHandle,
   generateCarsHandle,
   getCarsHandle,
+  resetCarHandle,
   selectCarHandle,
+  startCarHandle,
   updateCarHandle,
 } from '../handlers/garageHandlers';
 
@@ -15,6 +17,7 @@ export interface garageSlice {
   total: number;
   error: string | null;
   selectedCar: Car | null;
+  trackDistance: number;
 
   getCars: () => Promise<void>;
   createCar: (_car: Pick<Car, 'name' | 'color'>) => Promise<void>;
@@ -22,6 +25,14 @@ export interface garageSlice {
   selectCar: (_id: number) => void;
   updateCar: (_car: Pick<Car, 'id' | 'name' | 'color'>) => Promise<void>;
   generateCars: () => Promise<void>;
+  updateCarPosition: (
+    _id: number,
+    _race: { distance: number; time: number }
+  ) => void;
+  startCar: (_id: number) => Promise<void>;
+  stopCar: (_id: number, _distance?: number) => void;
+  resetCar: (_id: number) => Promise<void>;
+  setTrackDistance: (_px: number) => void;
 }
 
 export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
@@ -30,6 +41,7 @@ export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
   total: 0,
   error: null,
   selectedCar: null,
+  trackDistance: 0,
 
   getCars: async () => getCarsHandle(set),
   createCar: async (car) => createCarHandle(car, get, set),
@@ -37,4 +49,26 @@ export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
   selectCar: (id) => selectCarHandle(id, get, set),
   updateCar: async (car) => updateCarHandle(car, get, set),
   generateCars: async () => generateCarsHandle(get),
+  updateCarPosition: (id, { distance, time }) =>
+    set((state) => ({
+      cars: state.cars.map((car) =>
+        car.id === id ? { ...car, distance, time } : car
+      ),
+    })),
+  startCar: async (id) => startCarHandle(id, get),
+  stopCar: (id, distance?: number) =>
+    set((state) => ({
+      cars: state.cars.map((car) =>
+        car.id === id
+          ? {
+              ...car,
+              distance: distance || 0,
+              time: 0,
+            }
+          : car
+      ),
+    })),
+
+  resetCar: async (id) => resetCarHandle(id, get, set),
+  setTrackDistance: (px: number) => set(() => ({ trackDistance: px })),
 });

@@ -2,6 +2,8 @@ export interface Car {
   id: number;
   name: string;
   color: string;
+  distance?: number;
+  time?: number;
 }
 
 export type EngineStatus = 'started' | 'stopped' | 'drive';
