@@ -1,16 +1,9 @@
 import { useAppStore } from '../store/appStore';
 import Button from './ui/Button';
+import CarRaceControls from './CarRaceControls';
 
 function CarControl({ id }: { id: number }) {
-  const { deleteCar, selectCar, resetCar, startCar } = useAppStore();
-
-  const handleStart = async () => {
-    startCar(id);
-  };
-
-  const handleStop = async () => {
-    resetCar(id);
-  };
+  const { deleteCar, selectCar } = useAppStore();
 
   return (
     <div className="flex items-center gap-2 p-2 w-27 text-xs">
@@ -26,18 +19,7 @@ function CarControl({ id }: { id: number }) {
           onClick={() => deleteCar(id)}
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <Button
-          className="w-6 h-6 !p-1 bg-yellow-600"
-          name="A"
-          onClick={handleStart}
-        />
-        <Button
-          className="w-6 h-6 !p-1 bg-gray-600"
-          name="B"
-          onClick={handleStop}
-        />
-      </div>
+      <CarRaceControls id={id} />
     </div>
   );
 }
