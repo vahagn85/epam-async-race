@@ -1,3 +1,10 @@
 export const DOMAIN = 'http://127.0.0.1:3000';
 
 export const RANDOM_CARS_COUNT = 100;
+
+export const STATUS_CODE = {
+  BAD_REQUEST: 400,
+  NOT_FOUND: 404,
+  TOO_MANY_REQUESTS: 429,
+  INTERNAL_SERVER_ERROR: 500,
+};
