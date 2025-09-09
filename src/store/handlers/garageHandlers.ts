@@ -7,6 +7,8 @@ import {
   fetchCars,
   updateCarApi,
 } from '../../api/garage';
+import { generateCar } from '../../utils/generateCar';
+import { RANDOM_CARS_COUNT } from '../../constant';
 
 type Get = StoreApi<AppStoreState>['getState'];
 type Set = StoreApi<AppStoreState>['setState'];
@@ -71,4 +73,11 @@ export async function updateCarHandle(
       error: error instanceof Error ? error.message : 'Unexpected error',
     });
   }
+}
+
+export async function generateCarsHandle(get: Get) {
+  const promises = Array.from({ length: RANDOM_CARS_COUNT }, () =>
+    get().createCar(generateCar())
+  );
+  await Promise.all(promises);
 }
