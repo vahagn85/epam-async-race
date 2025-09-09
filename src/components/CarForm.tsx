@@ -30,7 +30,15 @@ function CarForm(props: CarFormProps) {
         disabled={disabled}
       />
 
-      <Button name={btnName} disabled={disabled} />
+      <Button
+        name={btnName}
+        disabled={disabled}
+        className={
+          btnName === 'Create'
+            ? 'bg-green-600 hover:bg-green-800'
+            : '!bg-amber-600 hover:!bg-amber-800'
+        }
+      />
     </form>
   );
 }

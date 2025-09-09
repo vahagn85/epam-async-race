@@ -5,6 +5,7 @@ import {
   deleteCarHandle,
   getCarsHandle,
   selectCarHandle,
+  updateCarHandle,
 } from '../handlers/garageHandlers';
 
 export interface garageSlice {
@@ -18,6 +19,7 @@ export interface garageSlice {
   createCar: (_car: Pick<Car, 'name' | 'color'>) => Promise<void>;
   deleteCar: (_id: number) => Promise<void>;
   selectCar: (_id: number) => void;
+  updateCar: (_car: Pick<Car, 'id' | 'name' | 'color'>) => Promise<void>;
 }
 
 export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
@@ -31,4 +33,5 @@ export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
   createCar: async (car) => createCarHandle(car, get, set),
   deleteCar: async (id) => deleteCarHandle(id, get, set),
   selectCar: (id) => selectCarHandle(id, get, set),
+  updateCar: async (car) => updateCarHandle(car, get, set),
 });

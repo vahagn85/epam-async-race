@@ -1,7 +1,12 @@
 import type { StoreApi } from 'zustand';
 import type { Car } from '../../types';
 import type { AppStoreState } from '../appStore';
-import { createCarApi, deleteCarApi, fetchCars } from '../../api/garage';
+import {
+  createCarApi,
+  deleteCarApi,
+  fetchCars,
+  updateCarApi,
+} from '../../api/garage';
 
 type Get = StoreApi<AppStoreState>['getState'];
 type Set = StoreApi<AppStoreState>['setState'];
@@ -51,4 +56,19 @@ export async function deleteCarHandle(id: number, get: Get, set: Set) {
 
 export async function selectCarHandle(id: number, get: Get, set: Set) {
   set({ selectedCar: get().cars.find((car) => car.id === id) });
+}
+
+export async function updateCarHandle(
+  car: Pick<Car, 'id' | 'name' | 'color'>,
+  get: Get,
+  set: Set
+) {
+  try {
+    const data = await updateCarApi(car);
+    set({ cars: get().cars.map((car) => (car.id === data?.id ? data : car)) });
+  } catch (error) {
+    set({
+      error: error instanceof Error ? error.message : 'Unexpected error',
+    });
+  }
 }

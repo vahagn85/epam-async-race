@@ -2,13 +2,14 @@ import CarForm from './CarForm';
 import { useAppStore } from '../store/appStore';
 
 function CarCreateEditPanel() {
-  const { createCar, selectedCar } = useAppStore((state) => state);
+  const { createCar, selectedCar, updateCar } = useAppStore((state) => state);
   const handleCreate = (text: string, color: string) => {
     createCar({ name: text, color });
   };
 
   const handleUpdate = (text: string, color: string) => {
-    console.log('Update car:', text, color, selectedCar);
+    if (!selectedCar) return;
+    updateCar({ ...selectedCar, name: text, color });
   };
 
   return (

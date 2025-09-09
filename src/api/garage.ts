@@ -45,3 +45,25 @@ export async function deleteCarApi(id: number): Promise<object | string> {
     return 'error';
   }
 }
+
+export async function updateCarApi(
+  car: Pick<Car, 'id' | 'name' | 'color'>
+): Promise<Car | undefined> {
+  try {
+    if (!car.id) {
+      throw new Error('ID is required');
+    }
+    const response = await fetch(`${DOMAIN}/garage/${car.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: car.name, color: car.color }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to update id: ${car.id}`);
+    }
+
+    return await response.json();
+  } catch {
+    return undefined;
+  }
+}
