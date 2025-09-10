@@ -8,16 +8,23 @@ import {
   updateCarApi,
 } from '../../api/garage';
 import { generateCar } from '../../utils/generateCar';
-import { CAR_PADDING, RANDOM_CARS_COUNT } from '../../constant';
+import {
+  CAR_PADDING,
+  PAGINATION_LIMIT,
+  RANDOM_CARS_COUNT,
+} from '../../constant';
 import carEngine from '../../api/engine';
 import { getCarDistanceFromDOM } from '../../utils/getDistance';
 
 type Get = StoreApi<AppStoreState>['getState'];
 type Set = StoreApi<AppStoreState>['setState'];
 
-export async function getCarsHandle(set: Set) {
+export async function getCarsHandle(page: number, set: Set) {
   try {
-    const { cars, total } = await fetchCars();
+    const { cars, total } = await fetchCars(
+      page,
+      PAGINATION_LIMIT.GARAGE_LIMIT
+    );
     set({ cars, total });
   } catch (error) {
     set({

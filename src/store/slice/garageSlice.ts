@@ -21,7 +21,7 @@ export interface GarageSlice {
   selectedCar: Car | null;
   trackDistance: number;
 
-  getCars: () => Promise<void>;
+  getCars: (page: number) => Promise<void>;
   createCar: (_car: Pick<Car, 'name' | 'color'>) => Promise<void>;
   deleteCar: (_id: number) => Promise<void>;
   selectCar: (_id: number) => void;
@@ -37,6 +37,7 @@ export interface GarageSlice {
   setTrackDistance: (_px: number) => void;
   startAllCars: () => Promise<void>;
   resetAllCars: () => Promise<void>;
+  setPage: (page: number) => void;
 }
 
 export const createGarageSlice: StateCreator<GarageSlice> = (set, get) => ({
@@ -47,7 +48,7 @@ export const createGarageSlice: StateCreator<GarageSlice> = (set, get) => ({
   selectedCar: null,
   trackDistance: 0,
 
-  getCars: async () => getCarsHandle(set),
+  getCars: async (page) => getCarsHandle(page, set),
   createCar: async (car) => createCarHandle(car, get, set),
   deleteCar: async (id) => deleteCarHandle(id, get, set),
   selectCar: (id) => selectCarHandle(id, get, set),
@@ -77,4 +78,5 @@ export const createGarageSlice: StateCreator<GarageSlice> = (set, get) => ({
   setTrackDistance: (px: number) => set(() => ({ trackDistance: px })),
   startAllCars: async () => startAllCarsHandle(get),
   resetAllCars: async () => resetAllCarsHandle(get),
+  setPage: (page) => set(() => ({ page })),
 });

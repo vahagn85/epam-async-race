@@ -1,6 +1,6 @@
 export const DOMAIN = 'http://127.0.0.1:3000';
 
-export const RANDOM_CARS_COUNT = 100;
+export const RANDOM_CARS_COUNT = 3;
 
 export const STATUS_CODE = {
   BAD_REQUEST: 400,
@@ -10,3 +10,8 @@ export const STATUS_CODE = {
 };
 
 export const CAR_PADDING = 10;
+
+export const PAGINATION_LIMIT = {
+  GARAGE_LIMIT: 7,
+  WINNERS_LIMIT: 10,
+};

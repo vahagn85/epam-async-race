@@ -1,6 +1,6 @@
 interface ButtonProps {
   name: string;
-  isBtn: boolean;
+  isBtn?: boolean;
   onClick?: () => void;
   className?: string;
   disabled?: boolean;

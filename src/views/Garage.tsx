@@ -6,9 +6,11 @@ import { useAppStore } from '../store/appStore';
 
 function Garage() {
   const getCars = useAppStore((state) => state.getCars);
+  const page = useAppStore((state) => state.page);
+
   useEffect(() => {
-    getCars();
-  }, [getCars]);
+    getCars(page);
+  }, [getCars, page]);
 
   return (
     <>
