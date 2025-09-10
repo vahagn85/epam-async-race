@@ -122,3 +122,27 @@ export async function resetCarHandle(id: number, get: Get, set: Set) {
     get().stopCar(id);
   }
 }
+
+export async function startAllCarsHandle(get: Get) {
+  const { cars, startCar, stopCar } = get();
+
+  try {
+    await Promise.all(cars.map((car) => startCar(car.id)));
+  } catch {
+    for (const car of cars) {
+      stopCar(car.id);
+    }
+  }
+}
+
+export async function resetAllCarsHandle(get: Get) {
+  const { cars, resetCar, stopCar } = get();
+
+  try {
+    await Promise.all(cars.map((car) => resetCar(car.id)));
+  } catch {
+    for (const car of cars) {
+      stopCar(car.id);
+    }
+  }
+}

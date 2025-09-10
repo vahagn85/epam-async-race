@@ -5,8 +5,10 @@ import {
   deleteCarHandle,
   generateCarsHandle,
   getCarsHandle,
+  resetAllCarsHandle,
   resetCarHandle,
   selectCarHandle,
+  startAllCarsHandle,
   startCarHandle,
   updateCarHandle,
 } from '../handlers/garageHandlers';
@@ -33,6 +35,8 @@ export interface garageSlice {
   stopCar: (_id: number, _distance?: number) => void;
   resetCar: (_id: number) => Promise<void>;
   setTrackDistance: (_px: number) => void;
+  startAllCars: () => Promise<void>;
+  resetAllCars: () => Promise<void>;
 }
 
 export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
@@ -71,4 +75,6 @@ export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
 
   resetCar: async (id) => resetCarHandle(id, get, set),
   setTrackDistance: (px: number) => set(() => ({ trackDistance: px })),
+  startAllCars: async () => startAllCarsHandle(get),
+  resetAllCars: async () => resetAllCarsHandle(get),
 });
