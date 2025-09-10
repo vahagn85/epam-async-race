@@ -6,20 +6,27 @@ import react from 'eslint-plugin-react';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import reactCompiler from 'eslint-plugin-react-compiler';
-import importPlugin from 'eslint-plugin-import';
+import importPluginX from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import { defineConfig } from 'eslint/config';
 
-export default defineConfig(
+import stylistic from '@stylistic/eslint-plugin';
+
+import airbnbExtended from 'eslint-config-airbnb-extended';
+
+export default defineConfig([
   { ignores: ['dist'] },
   {
+    files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
       ...tseslint.configs.strict,
+      ...airbnbExtended.configs.base.all,
+      ...airbnbExtended.configs.react.all,
       eslintPluginPrettier,
     ],
-    files: ['**/*.{ts,tsx}'],
     languageOptions: {
+      parser: tseslint.parser,
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
@@ -33,80 +40,35 @@ export default defineConfig(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       'react-compiler': reactCompiler,
-      import: importPlugin,
+      'import-x': importPluginX,
       'jsx-a11y': jsxA11y,
+      '@stylistic': stylistic,
     },
     rules: {
-      // Airbnb-like style
-      semi: ['error', 'always'],
-      quotes: ['error', 'single', { avoidEscape: true }],
-      indent: ['error', 2],
-      'comma-dangle': [
-        'error',
-        {
-          arrays: 'always-multiline',
-          objects: 'always-multiline',
-          imports: 'always-multiline',
-          exports: 'always-multiline',
-          functions: 'never',
-        },
-      ],
-      'no-trailing-spaces': 'error',
-      'object-curly-spacing': ['error', 'always'],
-      'arrow-spacing': ['error', { before: true, after: true }],
-      'prefer-const': 'error',
-      'no-var': 'error',
-      'no-console': 'warn',
-      eqeqeq: ['error', 'always'],
-      'no-unused-vars': [
-        'error',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
-      ],
-      'padding-line-between-statements': [
-        'error',
-        { blankLine: 'always', prev: 'directive', next: '*' },
-        { blankLine: 'always', prev: '*', next: 'return' },
-      ],
-
-      // Function length
       'max-lines-per-function': [
         'error',
         { max: 40, skipComments: true, skipBlankLines: true },
       ],
 
-      // Magic numbers
       'no-magic-numbers': [
         'error',
         { ignore: [0, 1], ignoreArrayIndexes: true, enforceConst: true },
       ],
-
-      // Manually add key jsx-a11y rules instead of extending
-      'jsx-a11y/alt-text': 'error',
-      'jsx-a11y/anchor-has-content': 'error',
-      'jsx-a11y/click-events-have-key-events': 'error',
-      'jsx-a11y/label-has-associated-control': ['error', { assert: 'either' }],
-      'jsx-a11y/no-static-element-interactions': 'error',
-
-      //Import rules (Airbnb style)
-      'import/order': [
-        'error',
-        {
-          groups: [
-            ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-          ],
-          'newlines-between': 'always',
-          alphabetize: { order: 'ignore' },
-        },
-      ],
-      'import/no-unresolved': 'off',
-      'import/prefer-default-export': 'off',
+      'react/require-default-props': 'off',
 
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
       ],
+
       'react-compiler/react-compiler': 'error',
+      'react/jsx-filename-extension': [
+        'error',
+        {
+          extensions: ['.jsx', '.tsx'],
+        },
+      ],
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
     },
@@ -115,5 +77,5 @@ export default defineConfig(
         version: 'detect',
       },
     },
-  }
-);
+  },
+]);
