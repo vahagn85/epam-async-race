@@ -7,4 +7,7 @@ export const getCarDistanceFromDOM = (id: number) => {
 
     return currentDistance;
   }
+  return 0;
 };
+
+export default getCarDistanceFromDOM;

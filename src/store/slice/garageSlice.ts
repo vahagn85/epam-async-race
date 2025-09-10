@@ -13,7 +13,7 @@ import {
   updateCarHandle,
 } from '../handlers/garageHandlers';
 
-export interface garageSlice {
+export interface GarageSlice {
   page: number;
   cars: Car[];
   total: number;
@@ -39,7 +39,7 @@ export interface garageSlice {
   resetAllCars: () => Promise<void>;
 }
 
-export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
+export const createGarageSlice: StateCreator<GarageSlice> = (set, get) => ({
   page: 1,
   cars: [],
   total: 0,

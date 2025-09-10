@@ -9,8 +9,8 @@ import {
 } from '../../api/garage';
 import { generateCar } from '../../utils/generateCar';
 import { CAR_PADDING, RANDOM_CARS_COUNT } from '../../constant';
-import { carEngine } from '../../api/engine';
-import { getCarDistanceFromDOM } from './../../utils/getDistance';
+import carEngine from '../../api/engine';
+import { getCarDistanceFromDOM } from '../../utils/getDistance';
 
 type Get = StoreApi<AppStoreState>['getState'];
 type Set = StoreApi<AppStoreState>['setState'];
@@ -69,7 +69,7 @@ export async function updateCarHandle(
 ) {
   try {
     const data = await updateCarApi(car);
-    set({ cars: get().cars.map((car) => (car.id === data?.id ? data : car)) });
+    set({ cars: get().cars.map((c) => (c.id === data?.id ? data : c)) });
   } catch (error) {
     set({
       error: error instanceof Error ? error.message : 'Unexpected error',
@@ -133,9 +133,9 @@ export async function startAllCarsHandle(get: Get) {
   try {
     await Promise.all(cars.map((car) => startCar(car.id)));
   } catch {
-    for (const car of cars) {
+    cars.forEach((car) => {
       stopCar(car.id);
-    }
+    });
   }
 }
 
@@ -145,8 +145,8 @@ export async function resetAllCarsHandle(get: Get) {
   try {
     await Promise.all(cars.map((car) => resetCar(car.id)));
   } catch {
-    for (const car of cars) {
+    cars.forEach((car) => {
       stopCar(car.id);
-    }
+    });
   }
 }

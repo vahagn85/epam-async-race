@@ -1,7 +1,7 @@
+import { useLayoutEffect, useRef } from 'react';
 import CarIcon from './CarIcon';
 import CarControl from './CarControl';
 import { useAppStore } from '../store/appStore';
-import { useLayoutEffect, useRef } from 'react';
 
 interface TrackRowProps {
   name: string;
@@ -48,7 +48,7 @@ function TrackRow({ name, color, id }: TrackRowProps) {
         <span className="absolute left-2 text-gray-400 font-mono text-lg">
           {name}
         </span>
-        <div className="border-l-2 h-full w-full border-r-2 border-dashed border-white"></div>
+        <div className="border-l-2 h-full w-full border-r-2 border-dashed border-white" />
       </div>
     </div>
   );

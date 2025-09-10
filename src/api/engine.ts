@@ -2,7 +2,7 @@ import { DOMAIN } from '../constant';
 import type { CarEngine, CarEngineDrive, EngineStatus } from '../types';
 import { getEngineError } from './errors';
 
-export async function carEngine(
+export default async function carEngine(
   id: number,
   status: EngineStatus
 ): Promise<CarEngine | CarEngineDrive | undefined> {

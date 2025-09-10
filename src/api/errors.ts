@@ -22,3 +22,6 @@ export function getEngineError(status: number): Error {
       throw new Error('Unexpected error');
   }
 }
+export function garageErrorId(): Error {
+  throw new Error('ID is required');
+}

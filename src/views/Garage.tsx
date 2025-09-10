@@ -1,8 +1,8 @@
+import { useEffect } from 'react';
 import CarsControl from '../components/CarsControl';
 import RaceTrack from '../components/RaceTrack';
 import GarageFooter from '../components/GarageFooter';
 import { useAppStore } from '../store/appStore';
-import { useEffect } from 'react';
 
 function Garage() {
   const getCars = useAppStore((state) => state.getCars);
