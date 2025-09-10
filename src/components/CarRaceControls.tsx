@@ -1,18 +1,20 @@
-import { useState } from 'react';
 import { useAppStore } from '../store/appStore';
 import Button from './ui/Button';
+import type { EngineStatus } from '../types';
 
-function CarRaceControls({ id }: { id: number }) {
+interface CarRaceControlsProps {
+  id: number;
+  status: EngineStatus;
+}
+
+function CarRaceControls({ id, status }: CarRaceControlsProps) {
   const { resetCar, startCar } = useAppStore();
-  const [status, setStatus] = useState<'started' | 'stopped'>('stopped');
-  const handleStart = async () => {
-    setStatus('started');
-    await startCar(id);
+  const handleStart = () => {
+    startCar(id);
   };
 
-  const handleStop = async () => {
-    await resetCar(id);
-    setStatus('stopped');
+  const handleStop = () => {
+    resetCar(id);
   };
 
   return (

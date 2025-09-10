@@ -1,8 +1,14 @@
 import { useAppStore } from '../store/appStore';
 import Button from './ui/Button';
 import CarRaceControls from './CarRaceControls';
+import type { EngineStatus } from '../types';
 
-function CarControl({ id }: { id: number }) {
+interface CarControlProps {
+  id: number;
+  status: EngineStatus;
+}
+
+function CarControl({ id, status }: CarControlProps) {
   const { deleteCar, selectCar } = useAppStore();
 
   return (
@@ -19,7 +25,7 @@ function CarControl({ id }: { id: number }) {
           onClick={() => deleteCar(id)}
         />
       </div>
-      <CarRaceControls id={id} />
+      <CarRaceControls id={id} status={status} />
     </div>
   );
 }

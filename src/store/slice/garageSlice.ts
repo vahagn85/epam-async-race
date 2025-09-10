@@ -56,7 +56,7 @@ export const createGarageSlice: StateCreator<garageSlice> = (set, get) => ({
   updateCarPosition: (id, { distance, time }) =>
     set((state) => ({
       cars: state.cars.map((car) =>
-        car.id === id ? { ...car, distance, time } : car
+        car.id === id ? { ...car, distance, time, status: 'started' } : car
       ),
     })),
   startCar: async (id) => startCarHandle(id, get),

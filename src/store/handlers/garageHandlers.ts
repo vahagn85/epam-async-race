@@ -85,6 +85,8 @@ export async function generateCarsHandle(get: Get) {
 }
 
 export async function startCarHandle(id: number, get: Get) {
+  const { updateCarPosition, trackDistance, stopCar } = get();
+
   try {
     const startData = await carEngine(id, 'started');
     if (!startData || !('velocity' in startData)) return;
@@ -93,8 +95,8 @@ export async function startCarHandle(id: number, get: Get) {
 
     const timeMs = serverDistance / velocity;
 
-    get().updateCarPosition(id, {
-      distance: get().trackDistance,
+    updateCarPosition(id, {
+      distance: trackDistance,
       time: timeMs,
     });
 
@@ -102,11 +104,11 @@ export async function startCarHandle(id: number, get: Get) {
     if (!driveData || !('success' in driveData)) {
       const currentDistance = getCarDistanceFromDOM(id);
       if (currentDistance) {
-        get().stopCar(id, currentDistance + CAR_PADDING);
+        stopCar(id, currentDistance + CAR_PADDING);
       }
     }
   } catch {
-    get().stopCar(id);
+    stopCar(id);
   }
 }
 
@@ -115,7 +117,9 @@ export async function resetCarHandle(id: number, get: Get, set: Set) {
     await carEngine(id, 'stopped');
     set((state) => ({
       cars: state.cars.map((car) =>
-        car.id === id ? { ...car, distance: 0, time: 0 } : car
+        car.id === id
+          ? { ...car, distance: 0, time: 0, status: 'stopped' }
+          : car
       ),
     }));
   } catch {

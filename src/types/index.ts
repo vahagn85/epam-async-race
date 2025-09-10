@@ -4,6 +4,7 @@ export interface Car {
   color: string;
   distance?: number;
   time?: number;
+  status?: EngineStatus;
 }
 
 export type EngineStatus = 'started' | 'stopped' | 'drive';
