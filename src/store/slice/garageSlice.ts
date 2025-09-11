@@ -12,6 +12,7 @@ import {
   startCarHandle,
   updateCarHandle,
 } from '../handlers/garageHandlers';
+import type { WinnerSlice } from './winnersSlice';
 
 export interface GarageSlice {
   page: number;
@@ -40,7 +41,9 @@ export interface GarageSlice {
   setPage: (page: number) => void;
 }
 
-export const createGarageSlice: StateCreator<GarageSlice> = (set, get) => ({
+export const createGarageSlice: StateCreator<
+  GarageSlice & Partial<WinnerSlice>
+> = (set, get) => ({
   page: 1,
   cars: [],
   total: 0,
