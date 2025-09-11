@@ -39,8 +39,17 @@ export async function createCarHandle(
   set: Set
 ) {
   try {
+    const { cars, total } = get();
+
     const data = await createCarApi(car);
-    set({ cars: [...get().cars, data], total: get().total + 1 });
+
+    set({
+      cars:
+        cars.length >= PAGINATION_LIMIT.GARAGE_LIMIT
+          ? [...cars]
+          : [...cars, data],
+      total: total + 1,
+    });
   } catch (error) {
     set({
       error: error instanceof Error ? error.message : 'Unexpected error',
@@ -84,11 +93,27 @@ export async function updateCarHandle(
   }
 }
 
-export async function generateCarsHandle(get: Get) {
-  const promises = Array.from({ length: RANDOM_CARS_COUNT }, () =>
-    get().createCar(generateCar())
-  );
-  await Promise.all(promises);
+export async function generateCarsHandle(get: Get, set: Set) {
+  try {
+    const { cars, total } = get();
+
+    const promises = Array.from({ length: RANDOM_CARS_COUNT }, async () => {
+      const car = generateCar();
+      const data = await createCarApi(car);
+      return data;
+    });
+
+    const newCars = await Promise.all(promises);
+
+    set({
+      cars: [...cars, ...newCars].slice(0, PAGINATION_LIMIT.GARAGE_LIMIT),
+      total: total + newCars.length,
+    });
+  } catch (error) {
+    set({
+      error: error instanceof Error ? error.message : 'Unexpected error',
+    });
+  }
 }
 
 export async function startCarHandle(id: number, get: Get) {

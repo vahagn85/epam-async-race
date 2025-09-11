@@ -31,6 +31,7 @@ function CarForm(props: CarFormProps) {
       />
 
       <Button
+        isBtn={false}
         name={btnName}
         disabled={disabled}
         className={
