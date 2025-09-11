@@ -71,6 +71,7 @@ export default defineConfig([
       ],
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
+      '@typescript-eslint/no-explicit-any': 'error',
     },
     settings: {
       react: {

@@ -15,3 +15,5 @@ export const PAGINATION_LIMIT = {
   GARAGE_LIMIT: 7,
   WINNERS_LIMIT: 10,
 };
+
+export const FIX_POINT_TIME = 2;
