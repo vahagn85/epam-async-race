@@ -3,6 +3,7 @@ import CarsControl from '../components/CarsControl';
 import RaceTrack from '../components/RaceTrack';
 import GarageFooter from '../components/GarageFooter';
 import { useAppStore } from '../store/appStore';
+import Heading from '../components/ui/Heading';
 
 function Garage() {
   const getCars = useAppStore((state) => state.getCars);
@@ -14,7 +15,7 @@ function Garage() {
 
   return (
     <>
-      <h1 className="text-3xl mb-4">Garage</h1>
+      <Heading>Garage</Heading>
       <CarsControl />
       <RaceTrack />
       <GarageFooter />
