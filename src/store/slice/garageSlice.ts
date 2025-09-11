@@ -10,7 +10,9 @@ import {
   selectCarHandle,
   startAllCarsHandle,
   startCarHandle,
+  stopCarHandle,
   updateCarHandle,
+  updateCarPositionHandle,
 } from '../handlers/garageHandlers';
 import type { WinnerSlice } from './winnersSlice';
 
@@ -58,24 +60,9 @@ export const createGarageSlice: StateCreator<
   updateCar: async (car) => updateCarHandle(car, get, set),
   generateCars: async () => generateCarsHandle(get, set),
   updateCarPosition: (id, { distance, time }) =>
-    set((state) => ({
-      cars: state.cars.map((car) =>
-        car.id === id ? { ...car, distance, time, status: 'started' } : car
-      ),
-    })),
+    updateCarPositionHandle(id, { distance, time }, set),
   startCar: async (id) => startCarHandle(id, get),
-  stopCar: (id, distance?: number) =>
-    set((state) => ({
-      cars: state.cars.map((car) =>
-        car.id === id
-          ? {
-              ...car,
-              distance: distance || 0,
-              time: 0,
-            }
-          : car
-      ),
-    })),
+  stopCar: (id, distance?: number) => stopCarHandle(id, set, distance),
 
   resetCar: async (id) => resetCarHandle(id, get, set),
   setTrackDistance: (px: number) => set(() => ({ trackDistance: px })),

@@ -116,6 +116,19 @@ export async function generateCarsHandle(get: Get, set: Set) {
   }
 }
 
+export function updateCarPositionHandle(
+  id: number,
+  race: { distance: number; time: number },
+  set: Set
+) {
+  const { distance, time } = race;
+  set((state) => ({
+    cars: state.cars.map((car) =>
+      car.id === id ? { ...car, distance, time, status: 'started' } : car
+    ),
+  }));
+}
+
 export async function startCarHandle(id: number, get: Get) {
   const { updateCarPosition, trackDistance, stopCar } = get();
 
@@ -142,6 +155,20 @@ export async function startCarHandle(id: number, get: Get) {
   } catch {
     stopCar(id);
   }
+}
+
+export function stopCarHandle(id: number, set: Set, distance?: number) {
+  set((state) => ({
+    cars: state.cars.map((car) =>
+      car.id === id
+        ? {
+            ...car,
+            distance: distance || 0,
+            time: 0,
+          }
+        : car
+    ),
+  }));
 }
 
 export async function resetCarHandle(id: number, get: Get, set: Set) {
