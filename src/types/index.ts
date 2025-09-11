@@ -17,3 +17,13 @@ export interface CarEngine {
 export interface CarEngineDrive {
   success: boolean;
 }
+
+export type SortBy = 'id' | 'wins' | 'time';
+
+export type SortOrder = 'ASC' | 'DESC';
+
+export interface Winner {
+  id: number;
+  wins: number;
+  time: number;
+}
