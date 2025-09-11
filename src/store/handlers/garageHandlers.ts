@@ -15,8 +15,10 @@ import {
 } from '../../constant';
 import carEngine from '../../api/engine';
 import { getCarDistanceFromDOM } from '../../utils/getDistance';
+import type { WinnerSlice } from '../slice/winnersSlice';
+import type { GarageSlice } from '../slice/garageSlice';
 
-type Get = StoreApi<AppStoreState>['getState'];
+type Get = () => Partial<WinnerSlice> & GarageSlice;
 type Set = StoreApi<AppStoreState>['setState'];
 
 export async function getCarsHandle(page: number, set: Set) {
