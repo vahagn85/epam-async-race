@@ -16,6 +16,19 @@ export async function fetchCars(
   return { cars, total };
 }
 
+export async function fetchCar(id: number): Promise<Car | undefined> {
+  try {
+    if (!id) {
+      throw new Error('ID is required');
+    }
+    const response = await fetch(`${DOMAIN}/garage/${id}`);
+    const car = await response.json();
+    return car;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function createCarApi(
   car: Pick<Car, 'name' | 'color'>
 ): Promise<Car> {

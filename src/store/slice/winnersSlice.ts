@@ -1,11 +1,11 @@
 import type { StateCreator } from 'zustand';
-import type { Winner } from '../../types';
+import type { WinnerTable } from '../../types';
 import { getWinnersHandle } from '../handlers/winnersHandlers';
 import type { GarageSlice } from './garageSlice';
 
 export interface WinnerSlice {
   winnerPage: number;
-  winners: Winner[];
+  winners: WinnerTable[];
   winnerTotal: number;
   winnerError: string | null;
 

@@ -27,3 +27,9 @@ export interface Winner {
   wins: number;
   time: number;
 }
+
+export type WinnerTable = Winner & {
+  carId: number;
+  name: string;
+  car: string;
+};

@@ -1,16 +1,9 @@
+import { useAppStore } from '../store/appStore';
+import type { WinnerTable } from '../types';
 import CarIcon from './CarIcon';
 import Table, { type Column } from './ui/Table';
 
-interface Winner {
-  id: number;
-  carId: number;
-  car: string;
-  name: string;
-  wins: number;
-  time: string;
-}
-
-const columns: Column<Winner>[] = [
+const columns: Column<WinnerTable>[] = [
   { key: 'carId', header: 'NUMBER' },
   {
     key: 'car',
@@ -24,25 +17,9 @@ const columns: Column<Winner>[] = [
     header: 'BEST TIME (SECONDS)',
   },
 ];
-const winners = [
-  {
-    id: 1,
-    carId: 1,
-    car: '#000',
-    name: 'CAr 1',
-    wins: 5,
-    time: '2.92',
-  },
-  {
-    id: 2,
-    carId: 2,
-    car: '#ccc',
-    name: 'CAr 2',
-    wins: 3,
-    time: '2.52',
-  },
-];
+
 function WinnersTable() {
+  const winners = useAppStore((state) => state.winners);
   return (
     <div className="overflow-x-auto bg-gray-600 rounded-lg shadow-md">
       <Table columns={columns} data={winners} emptyText="No Winners" />
