@@ -168,6 +168,7 @@ export async function startCarHandle(
         const winnerResult = { id, time };
         set({
           winner: { id, time, name: carById?.name as string },
+          winnerModal: true,
         });
         await saveWinner(winnerResult);
       }

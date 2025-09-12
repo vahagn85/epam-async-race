@@ -10,10 +10,12 @@ export interface WinnerSlice {
   winnerError: string | null;
   sort: SortBy;
   order: SortOrder;
+  winnerModal: boolean;
 
   getWinners: (page: number) => Promise<void>;
   setSort: (key: SortBy) => void;
   setWinnerPage: (page: number) => void;
+  closeWinnerModal: () => void;
 }
 
 export const createWinnersSlice: StateCreator<
@@ -25,8 +27,10 @@ export const createWinnersSlice: StateCreator<
   winnerError: null,
   sort: 'id',
   order: 'ASC',
+  winnerModal: false,
 
   getWinners: async (page) => getWinnersHandle(page, get, set),
   setSort: async (key) => setSortHandle(key, set),
   setWinnerPage: (page) => set(() => ({ winnerPage: page })),
+  closeWinnerModal: () => set({ winnerModal: false }),
 });

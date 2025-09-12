@@ -10,7 +10,8 @@ function Garage() {
   const getCars = useAppStore((state) => state.getCars);
   const page = useAppStore((state) => state.page);
   const winner = useAppStore((state) => state.winner);
-  const resetWinner = useAppStore((state) => state.resetWinner);
+  const winnerModal = useAppStore((state) => state.winnerModal);
+  const closeWinnerModal = useAppStore((state) => state.closeWinnerModal);
 
   useEffect(() => {
     getCars(page);
@@ -22,7 +23,7 @@ function Garage() {
       <CarsControl />
       <RaceTrack />
       <GarageFooter />
-      <Modal isOpen={winner !== null} onClose={resetWinner} size="sm">
+      <Modal isOpen={winnerModal} onClose={closeWinnerModal} size="sm">
         <Heading size="xl">Winner:</Heading>
         <Heading level={2} size="lg">
           Car: {winner?.name}
