@@ -17,6 +17,7 @@ import {
 import type { WinnerSlice } from './winnersSlice';
 
 export interface GarageSlice {
+  loading: boolean;
   page: number;
   cars: Car[];
   total: number;
@@ -48,6 +49,7 @@ export interface GarageSlice {
 export const createGarageSlice: StateCreator<
   GarageSlice & Partial<WinnerSlice>
 > = (set, get) => ({
+  loading: false,
   page: 1,
   cars: [],
   total: 0,

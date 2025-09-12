@@ -23,6 +23,7 @@ type Get = () => Partial<WinnerSlice> & GarageSlice;
 type Set = StoreApi<AppStoreState>['setState'];
 
 export async function getCarsHandle(page: number, set: Set) {
+  set({ loading: true });
   try {
     const { cars, total } = await fetchCars(
       page,
@@ -33,6 +34,8 @@ export async function getCarsHandle(page: number, set: Set) {
     set({
       error: error instanceof Error ? error.message : 'Unexpected error',
     });
+  } finally {
+    set({ loading: false });
   }
 }
 
