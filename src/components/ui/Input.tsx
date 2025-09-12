@@ -5,6 +5,7 @@ interface InputProps {
   onChange?: (_value: string) => void;
   className?: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 function Input(props: InputProps) {
@@ -15,6 +16,7 @@ function Input(props: InputProps) {
     onChange,
     className,
     disabled,
+    required = true,
   } = props;
 
   return (
@@ -24,6 +26,7 @@ function Input(props: InputProps) {
       disabled={disabled}
       className={`flex-auto p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className || ''} ${disabled ? 'opacity-50 cursor-not-allowed disabled:bg-gray-200' : ''}`}
       value={value}
+      required={required}
       onChange={(e) => onChange?.(e.target.value)}
     />
   );

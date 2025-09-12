@@ -18,6 +18,7 @@ function CarForm(props: CarFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(text, color);
+    setText('');
   };
 
   return (

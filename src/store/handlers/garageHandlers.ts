@@ -88,7 +88,10 @@ export async function updateCarHandle(
 ) {
   try {
     const data = await updateCarApi(car);
-    set({ cars: get().cars.map((c) => (c.id === data?.id ? data : c)) });
+    set({
+      cars: get().cars.map((c) => (c.id === data?.id ? data : c)),
+      selectedCar: null,
+    });
   } catch (error) {
     set({
       error: error instanceof Error ? error.message : 'Unexpected error',
