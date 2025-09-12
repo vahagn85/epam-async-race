@@ -13,6 +13,7 @@ export interface WinnerSlice {
 
   getWinners: (page: number) => Promise<void>;
   setSort: (key: SortBy) => void;
+  setWinnerPage: (page: number) => void;
 }
 
 export const createWinnersSlice: StateCreator<
@@ -27,4 +28,5 @@ export const createWinnersSlice: StateCreator<
 
   getWinners: async (page) => getWinnersHandle(page, get, set),
   setSort: async (key) => setSortHandle(key, set),
+  setWinnerPage: (page) => set(() => ({ winnerPage: page })),
 });
