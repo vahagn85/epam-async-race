@@ -33,3 +33,7 @@ export type WinnerTable = Winner & {
   name: string;
   car: string;
 };
+
+export interface StatusError extends Error {
+  status?: number;
+}

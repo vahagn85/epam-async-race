@@ -17,3 +17,4 @@ export const PAGINATION_LIMIT = {
 };
 
 export const FIX_POINT_TIME = 2;
+export const MS_PER_SECOND = 1000;

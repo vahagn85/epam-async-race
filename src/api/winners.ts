@@ -1,5 +1,5 @@
 import { DOMAIN, STATUS_CODE } from '../constant';
-import type { SortBy, SortOrder, Winner } from '../types';
+import type { SortBy, SortOrder, StatusError, Winner } from '../types';
 
 export async function fetchWinners(
   page?: number,
@@ -34,22 +34,21 @@ export async function fetchWinner(id: number): Promise<Winner | undefined> {
 export async function createWinnerApi(
   car: Winner
 ): Promise<Winner | undefined> {
-  try {
-    const response = await fetch(`${DOMAIN}/winners`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(car),
-    });
-    if (!response.ok) {
-      if (response.status === STATUS_CODE.INTERNAL_SERVER_ERROR) {
-        throw new Error('Error: Insert failed, duplicate id');
-      }
-      throw new Error('Not Created');
-    }
-    return await response.json();
-  } catch {
-    return undefined;
+  const response = await fetch(`${DOMAIN}/winners`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(car),
+  });
+  if (!response.ok) {
+    const text =
+      response.status === STATUS_CODE.INTERNAL_SERVER_ERROR
+        ? 'Error: Insert failed, duplicate id'
+        : 'Not Created';
+    const error: StatusError = new Error(text);
+    error.status = response.status;
+    throw error;
   }
+  return response.json();
 }
 
 export async function deleteWinnerApi(id: number): Promise<void | string> {

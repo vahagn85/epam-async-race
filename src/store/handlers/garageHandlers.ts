@@ -17,6 +17,7 @@ import carEngine from '../../api/engine';
 import { getCarDistanceFromDOM } from '../../utils/getDistance';
 import type { WinnerSlice } from '../slice/winnersSlice';
 import type { GarageSlice } from '../slice/garageSlice';
+import { convertMsToSeconds, saveWinner } from '../../helper/winners';
 
 type Get = () => Partial<WinnerSlice> & GarageSlice;
 type Set = StoreApi<AppStoreState>['setState'];
@@ -131,7 +132,12 @@ export function updateCarPositionHandle(
   }));
 }
 
-export async function startCarHandle(id: number, get: Get) {
+export async function startCarHandle(
+  id: number,
+  get: Get,
+  set: Set,
+  isRace?: boolean
+) {
   const { updateCarPosition, trackDistance, stopCar } = get();
 
   try {
@@ -152,6 +158,17 @@ export async function startCarHandle(id: number, get: Get) {
       const currentDistance = getCarDistanceFromDOM(id);
       if (currentDistance) {
         stopCar(id, currentDistance + CAR_PADDING);
+      }
+    } else if (driveData?.success && isRace) {
+      const carWinner = get().winner;
+      if (!carWinner) {
+        set({ winner: id });
+        const winnerResult = {
+          id,
+          time: +convertMsToSeconds(timeMs),
+        };
+
+        await saveWinner(winnerResult);
       }
     }
   } catch {
@@ -188,11 +205,12 @@ export async function resetCarHandle(id: number, get: Get, set: Set) {
   }
 }
 
-export async function startAllCarsHandle(get: Get) {
+export async function startAllCarsHandle(get: Get, set: Set) {
   const { cars, startCar, stopCar } = get();
 
+  set({ winner: null });
   try {
-    await Promise.all(cars.map((car) => startCar(car.id)));
+    await Promise.all(cars.map((car) => startCar(car.id, true)));
   } catch {
     cars.forEach((car) => {
       stopCar(car.id);

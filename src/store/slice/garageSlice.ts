@@ -23,6 +23,7 @@ export interface GarageSlice {
   error: string | null;
   selectedCar: Car | null;
   trackDistance: number;
+  winner: number | null;
 
   getCars: (page: number) => Promise<void>;
   createCar: (_car: Pick<Car, 'name' | 'color'>) => Promise<void>;
@@ -34,7 +35,7 @@ export interface GarageSlice {
     _id: number,
     _race: { distance: number; time: number }
   ) => void;
-  startCar: (_id: number) => Promise<void>;
+  startCar: (_id: number, _isRace?: boolean) => Promise<void>;
   stopCar: (_id: number, _distance?: number) => void;
   resetCar: (_id: number) => Promise<void>;
   setTrackDistance: (_px: number) => void;
@@ -52,6 +53,7 @@ export const createGarageSlice: StateCreator<
   error: null,
   selectedCar: null,
   trackDistance: 0,
+  winner: null,
 
   getCars: async (page) => getCarsHandle(page, set),
   createCar: async (car) => createCarHandle(car, get, set),
@@ -61,12 +63,12 @@ export const createGarageSlice: StateCreator<
   generateCars: async () => generateCarsHandle(get, set),
   updateCarPosition: (id, { distance, time }) =>
     updateCarPositionHandle(id, { distance, time }, set),
-  startCar: async (id) => startCarHandle(id, get),
+  startCar: async (id, isRace) => startCarHandle(id, get, set, isRace),
   stopCar: (id, distance?: number) => stopCarHandle(id, set, distance),
 
   resetCar: async (id) => resetCarHandle(id, get, set),
   setTrackDistance: (px: number) => set(() => ({ trackDistance: px })),
-  startAllCars: async () => startAllCarsHandle(get),
+  startAllCars: async () => startAllCarsHandle(get, set),
   resetAllCars: async () => resetAllCarsHandle(get),
   setPage: (page) => set(() => ({ page })),
 });
