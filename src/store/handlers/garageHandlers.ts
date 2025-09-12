@@ -198,16 +198,26 @@ export function stopCarHandle(id: number, set: Set, distance?: number) {
   }));
 }
 
-export async function resetCarHandle(id: number, get: Get, set: Set) {
+export async function resetCarHandle(
+  id: number,
+  get: Get,
+  set: Set,
+  isRace?: boolean
+) {
   try {
     await carEngine(id, 'stopped');
-    set((state) => ({
-      cars: state.cars.map((car) =>
+    set((state) => {
+      const updatedCars = state.cars.map((car) =>
         car.id === id
           ? { ...car, distance: 0, time: 0, status: 'stopped' }
           : car
-      ),
-    }));
+      );
+
+      return {
+        cars: updatedCars,
+        ...(isRace ? {} : { raceStatus: 'stopped' }),
+      } as Partial<AppStoreState>;
+    });
   } catch {
     get().stopCar(id);
   }
@@ -216,9 +226,10 @@ export async function resetCarHandle(id: number, get: Get, set: Set) {
 export async function startAllCarsHandle(get: Get, set: Set) {
   const { cars, startCar, stopCar } = get();
 
-  set({ winner: null });
+  set({ winner: null, raceStatus: 'started' });
   try {
     await Promise.all(cars.map((car) => startCar(car.id, true)));
+    set({ raceStatus: 'drive' });
   } catch {
     cars.forEach((car) => {
       stopCar(car.id);

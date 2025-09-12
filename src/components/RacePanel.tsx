@@ -1,26 +1,20 @@
-import { useState } from 'react';
 import { useAppStore } from '../store/appStore';
 import Button from './ui/Button';
 
 function RacePanel() {
-  const [status, setStatus] = useState<'started' | 'stopped' | 'finished'>(
-    'stopped'
-  );
-  const { generateCars, startAllCars, resetAllCars } = useAppStore();
+  const { generateCars, startAllCars, resetAllCars, raceStatus } =
+    useAppStore();
 
   const handleGenerate = () => {
     generateCars();
   };
 
   const handleRace = async () => {
-    setStatus('started');
     await startAllCars();
-    setStatus('finished');
   };
 
   const handleReset = async () => {
     await resetAllCars();
-    setStatus('stopped');
   };
 
   return (
@@ -28,13 +22,13 @@ function RacePanel() {
       <Button
         name="Race"
         onClick={handleRace}
-        disabled={status === 'started' || status === 'finished'}
+        disabled={raceStatus === 'started' || raceStatus === 'drive'}
         className="bg-green-500 hover:bg-green-700"
       />
       <Button
         name="Reset"
         onClick={handleReset}
-        disabled={status === 'stopped' || status === 'started'}
+        disabled={raceStatus === 'stopped' || raceStatus === 'started'}
         className="bg-red-500 hover:bg-red-700"
       />
       <Button name="Generate Cars" onClick={handleGenerate} />

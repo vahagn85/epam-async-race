@@ -9,7 +9,7 @@ interface CarControlProps {
 }
 
 function CarControl({ id, status }: CarControlProps) {
-  const { deleteCar, selectCar } = useAppStore();
+  const { deleteCar, selectCar, raceStatus } = useAppStore();
 
   return (
     <div className="flex items-center gap-2 p-2 w-27 text-xs">
@@ -23,6 +23,7 @@ function CarControl({ id, status }: CarControlProps) {
           className="!px-2 !py-1 bg-pink-700 hover:bg-pink-600"
           name="Remove"
           onClick={() => deleteCar(id)}
+          disabled={raceStatus === 'started'}
         />
       </div>
       <CarRaceControls id={id} status={status} />
