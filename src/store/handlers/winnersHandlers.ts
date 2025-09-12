@@ -21,7 +21,7 @@ export async function getWinnersHandle(page: number, get: Get, set: Set) {
     );
     const newWinners = await transformToWinners(winners);
 
-    set({ winners: newWinners, total });
+    set({ winners: newWinners, winnerTotal: total });
   } catch (error) {
     set({
       winnerError: error instanceof Error ? error.message : 'Unexpected error',
