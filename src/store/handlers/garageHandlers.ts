@@ -18,6 +18,7 @@ import { getCarDistanceFromDOM } from '../../utils/getDistance';
 import type { WinnerSlice } from '../slice/winnersSlice';
 import type { GarageSlice } from '../slice/garageSlice';
 import { convertMsToSeconds, saveWinner } from '../../helper/winners';
+import { deleteWinnerApi } from '../../api/winners';
 
 type Get = () => Partial<WinnerSlice> & GarageSlice;
 type Set = StoreApi<AppStoreState>['setState'];
@@ -66,12 +67,20 @@ export async function createCarHandle(
 export async function deleteCarHandle(id: number, get: Get, set: Set) {
   try {
     const data = await deleteCarApi(id);
+
     if (data === 'success') {
+      const { cars, total, page } = get();
+      const updatedCars = cars.filter((car) => car.id !== id);
+      const newTotal = total - 1;
+      const newPage = updatedCars.length === 0 && page > 1 ? page - 1 : page;
+
       set({
-        cars: get().cars.filter((car) => car.id !== id),
-        total: get().total - 1,
+        cars: updatedCars,
+        total: newTotal,
         selectedCar: null,
+        page: newPage,
       });
+      await deleteWinnerApi(id);
     }
   } catch (error) {
     set({
