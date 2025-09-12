@@ -1,6 +1,6 @@
 import type { StateCreator } from 'zustand';
-import type { WinnerTable } from '../../types';
-import { getWinnersHandle } from '../handlers/winnersHandlers';
+import type { SortBy, SortOrder, WinnerTable } from '../../types';
+import { getWinnersHandle, setSortHandle } from '../handlers/winnersHandlers';
 import type { GarageSlice } from './garageSlice';
 
 export interface WinnerSlice {
@@ -8,8 +8,11 @@ export interface WinnerSlice {
   winners: WinnerTable[];
   winnerTotal: number;
   winnerError: string | null;
+  sort: SortBy;
+  order: SortOrder;
 
   getWinners: (page: number) => Promise<void>;
+  setSort: (key: SortBy) => void;
 }
 
 export const createWinnersSlice: StateCreator<
@@ -19,6 +22,9 @@ export const createWinnersSlice: StateCreator<
   winners: [],
   winnerTotal: 0,
   winnerError: null,
+  sort: 'id',
+  order: 'ASC',
 
-  getWinners: async (page) => getWinnersHandle(page, set),
+  getWinners: async (page) => getWinnersHandle(page, get, set),
+  setSort: async (key) => setSortHandle(key, set),
 });

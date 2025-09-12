@@ -7,10 +7,12 @@ import { useAppStore } from '../store/appStore';
 function Winners() {
   const getWinners = useAppStore((state) => state.getWinners);
   const winnerPage = useAppStore((state) => state.winnerPage);
+  const sort = useAppStore((state) => state.sort);
+  const order = useAppStore((state) => state.order);
 
   useEffect(() => {
     getWinners(winnerPage);
-  }, [getWinners, winnerPage]);
+  }, [getWinners, winnerPage, sort, order]);
 
   return (
     <>
