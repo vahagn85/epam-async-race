@@ -162,12 +162,13 @@ export async function startCarHandle(
     } else if (driveData?.success && isRace) {
       const carWinner = get().winner;
       if (!carWinner) {
-        set({ winner: id });
-        const winnerResult = {
-          id,
-          time: +convertMsToSeconds(timeMs),
-        };
+        const carById = get().cars.find((car) => car.id === id);
 
+        const time = +convertMsToSeconds(timeMs);
+        const winnerResult = { id, time };
+        set({
+          winner: { id, time, name: carById?.name as string },
+        });
         await saveWinner(winnerResult);
       }
     }

@@ -34,6 +34,12 @@ export type WinnerTable = Winner & {
   car: string;
 };
 
+export interface CarWin {
+  id: number;
+  name: string;
+  time: number;
+}
+
 export interface StatusError extends Error {
   status?: number;
 }
