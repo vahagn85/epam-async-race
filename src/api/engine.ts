@@ -4,11 +4,13 @@ import { getEngineError } from './errors';
 
 export default async function carEngine(
   id: number,
-  status: EngineStatus
+  status: EngineStatus,
+  signal?: AbortSignal
 ): Promise<CarEngine | CarEngineDrive | undefined> {
   try {
     const response = await fetch(`${DOMAIN}/engine?id=${id}&status=${status}`, {
       method: 'PATCH',
+      signal,
     });
     if (!response.ok) {
       getEngineError(response.status);
