@@ -85,3 +85,30 @@ export async function updateWinnerApi(
     return undefined;
   }
 }
+
+export async function saveWinner(winner: { id: number; time: number }) {
+  try {
+    await createWinnerApi({
+      id: winner.id,
+      wins: 1,
+      time: winner.time,
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      const errorWithStatus = err as Error & { status?: number };
+
+      if (errorWithStatus.status === STATUS_CODE.INTERNAL_SERVER_ERROR) {
+        const existing = await fetchWinner(winner.id);
+        if (!existing) return;
+
+        await updateWinnerApi({
+          id: winner.id,
+          wins: existing.wins + 1,
+          time: Math.min(existing.time, winner.time),
+        });
+      }
+    } else {
+      throw err;
+    }
+  }
+}
