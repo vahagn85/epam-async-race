@@ -54,6 +54,7 @@ function CarForm(props: CarFormProps) {
           onChangeText?.(v);
         }}
         disabled={disabled}
+        maxLength={30}
       />
       <Input
         type="color"

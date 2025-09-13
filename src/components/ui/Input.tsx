@@ -6,6 +6,7 @@ interface InputProps {
   className?: string;
   disabled?: boolean;
   required?: boolean;
+  maxLength?: number;
 }
 
 function Input(props: InputProps) {
@@ -17,6 +18,7 @@ function Input(props: InputProps) {
     className,
     disabled,
     required = true,
+    maxLength,
   } = props;
 
   return (
@@ -28,6 +30,7 @@ function Input(props: InputProps) {
       value={value}
       required={required}
       onChange={(e) => onChange?.(e.target.value)}
+      maxLength={maxLength}
     />
   );
 }
