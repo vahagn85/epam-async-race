@@ -248,6 +248,11 @@ export async function startAllCarsHandle(get: Get, set: Set) {
 
   set({ winner: null, raceStatus: 'started' });
   try {
+    const isStarted = get().cars.some((car) => car?.status === 'started');
+    if (isStarted) {
+      await get().resetAllCars();
+      set({ raceStatus: 'started' });
+    }
     await Promise.all(cars.map((car) => startCar(car.id, true)));
     set({ raceStatus: 'drive' });
   } catch {
