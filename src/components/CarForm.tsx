@@ -63,6 +63,7 @@ function CarForm(props: CarFormProps) {
           onChangeColor?.(v);
         }}
         disabled={disabled}
+        className="flex-none"
       />
       <FormButton btnName={btnName} disabled={disabled} />
     </form>

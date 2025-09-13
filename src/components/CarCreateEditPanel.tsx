@@ -15,7 +15,7 @@ function CarCreateEditPanel() {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="w-full md:w-auto flex flex-col md:flex-row gap-4">
       <CarForm
         key={createForm?.id || 'create'}
         initTextValue={createForm.text || ''}
