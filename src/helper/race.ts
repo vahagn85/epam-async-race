@@ -1,3 +1,5 @@
+import { CAR_PADDING } from '../constant';
+
 export const getCarDistanceFromDOM = (id: number) => {
   const carElem = document.querySelector<HTMLElement>(`[data-car-id='${id}']`);
   if (carElem) {
@@ -10,4 +12,12 @@ export const getCarDistanceFromDOM = (id: number) => {
   return 0;
 };
 
-export default getCarDistanceFromDOM;
+export function driveFail(
+  id: number,
+  stopCar: (id: number, distance?: number) => void
+) {
+  const currentDistance = getCarDistanceFromDOM(id);
+  if (currentDistance) {
+    stopCar(id, currentDistance + CAR_PADDING);
+  }
+}

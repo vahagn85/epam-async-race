@@ -8,19 +8,16 @@ import {
   updateCarApi,
 } from '../../api/garage';
 import { generateCar } from '../../utils/generateCar';
-import {
-  CAR_PADDING,
-  PAGINATION_LIMIT,
-  RANDOM_CARS_COUNT,
-} from '../../constant';
+import { PAGINATION_LIMIT, RANDOM_CARS_COUNT } from '../../constant';
 import carEngine from '../../api/engine';
-import { getCarDistanceFromDOM } from '../../utils/getDistance';
 import type { WinnerSlice } from '../slice/winnersSlice';
 import type { GarageSlice } from '../slice/garageSlice';
-import { convertMsToSeconds, saveWinner } from '../../helper/winners';
-import { deleteWinnerApi } from '../../api/winners';
+import { convertMsToSeconds } from '../../helper/winners';
+import { deleteWinnerApi, saveWinner } from '../../api/winners';
+import type { ControllerSlice } from '../slice/controllerSlice';
+import { driveFail } from '../../helper/race';
 
-type Get = () => Partial<WinnerSlice> & GarageSlice;
+type Get = () => Partial<WinnerSlice> & Partial<ControllerSlice> & GarageSlice;
 type Set = StoreApi<AppStoreState>['setState'];
 
 export async function getCarsHandle(page: number, set: Set) {
@@ -148,16 +145,40 @@ export function updateCarPositionHandle(
   }));
 }
 
+function winnerHandle(id: number, timeMs: number, get: Get, set: Set) {
+  if (get().winner) return;
+
+  const carById = get().cars.find((car) => car.id === id);
+  const time = +convertMsToSeconds(timeMs);
+
+  set({
+    winner: { id, time, name: carById?.name as string },
+    winnerModal: true,
+  });
+
+  saveWinner({ id, time });
+}
+
 export async function startCarHandle(
   id: number,
   get: Get,
   set: Set,
   isRace?: boolean
 ) {
-  const { updateCarPosition, trackDistance, stopCar } = get();
+  const {
+    updateCarPosition,
+    trackDistance,
+    stopCar,
+    addController,
+    removeController,
+  } = get();
+  const controller = new AbortController();
+
+  get().abortControllerById?.(id);
+  addController?.(id, controller);
 
   try {
-    const startData = await carEngine(id, 'started');
+    const startData = await carEngine(id, 'started', controller.signal);
     if (!startData || !('velocity' in startData)) return;
 
     const { velocity, distance: serverDistance } = startData;
@@ -169,28 +190,16 @@ export async function startCarHandle(
       time: timeMs,
     });
 
-    const driveData = await carEngine(id, 'drive');
+    const driveData = await carEngine(id, 'drive', controller.signal);
     if (!driveData || !('success' in driveData)) {
-      const currentDistance = getCarDistanceFromDOM(id);
-      if (currentDistance) {
-        stopCar(id, currentDistance + CAR_PADDING);
-      }
-    } else if (driveData?.success && isRace) {
-      const carWinner = get().winner;
-      if (!carWinner) {
-        const carById = get().cars.find((car) => car.id === id);
-
-        const time = +convertMsToSeconds(timeMs);
-        const winnerResult = { id, time };
-        set({
-          winner: { id, time, name: carById?.name as string },
-          winnerModal: true,
-        });
-        await saveWinner(winnerResult);
-      }
+      driveFail(id, stopCar);
+    } else if (driveData?.success && isRace && get().raceStatus !== 'stopped') {
+      winnerHandle(id, timeMs, get, set);
     }
-  } catch {
-    stopCar(id);
+  } catch (e) {
+    if (e instanceof Error && e?.name !== 'AbortError') stopCar(id);
+  } finally {
+    removeController?.(id);
   }
 }
 
@@ -215,6 +224,7 @@ export async function resetCarHandle(
   isRace?: boolean
 ) {
   try {
+    get().abortControllerById?.(id);
     await carEngine(id, 'stopped');
     set((state) => {
       const updatedCars = state.cars.map((car) =>
@@ -247,11 +257,15 @@ export async function startAllCarsHandle(get: Get, set: Set) {
   }
 }
 
-export async function resetAllCarsHandle(get: Get) {
-  const { cars, resetCar, stopCar } = get();
+export async function resetAllCarsHandle(get: Get, set: Set) {
+  const { cars, resetCar, stopCar, abortAllControllers, raceStatus } = get();
 
   try {
-    await Promise.all(cars.map((car) => resetCar(car.id)));
+    set({ raceStatus: 'stopped' });
+    abortAllControllers?.();
+    if (raceStatus !== 'stopped') {
+      await Promise.all(cars.map((car) => resetCar(car.id)));
+    }
   } catch {
     cars.forEach((car) => {
       stopCar(car.id);

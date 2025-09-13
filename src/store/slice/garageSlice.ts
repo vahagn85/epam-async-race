@@ -76,7 +76,7 @@ export const createGarageSlice: StateCreator<
   resetCar: async (id, isRace) => resetCarHandle(id, get, set, isRace),
   setTrackDistance: (px: number) => set(() => ({ trackDistance: px })),
   startAllCars: async () => startAllCarsHandle(get, set),
-  resetAllCars: async () => resetAllCarsHandle(get),
+  resetAllCars: async () => resetAllCarsHandle(get, set),
   setPage: (page) => set(() => ({ page })),
   resetWinner: () => set(() => ({ winner: null })),
   setCreateForm: (field) =>
