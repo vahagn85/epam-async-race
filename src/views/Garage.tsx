@@ -11,6 +11,7 @@ function Garage() {
   const getCars = useAppStore((state) => state.getCars);
   const page = useAppStore((state) => state.page);
   const loading = useAppStore((state) => state.loading);
+  const resetAllCars = useAppStore((state) => state.resetAllCars);
 
   const isFirstLoad = useRef(true);
 
@@ -20,7 +21,10 @@ function Garage() {
         isFirstLoad.current = false;
       }
     });
-  }, [getCars, page]);
+    return () => {
+      resetAllCars();
+    };
+  }, [getCars, page, resetAllCars]);
 
   return (
     <>
