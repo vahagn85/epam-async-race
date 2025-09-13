@@ -1,5 +1,5 @@
 import type { StateCreator } from 'zustand';
-import type { Car, CarWin, EngineStatus } from '../../types';
+import type { Car, CarWin, EngineStatus, FormFields } from '../../types';
 import {
   createCarHandle,
   deleteCarHandle,
@@ -23,6 +23,7 @@ export interface GarageSlice {
   total: number;
   error: string | null;
   selectedCar: Car | null;
+  createForm: FormFields;
   trackDistance: number;
   winner: CarWin | null;
   raceStatus: EngineStatus;
@@ -45,6 +46,7 @@ export interface GarageSlice {
   resetAllCars: () => Promise<void>;
   setPage: (page: number) => void;
   resetWinner: () => void;
+  setCreateForm: (field: Partial<FormFields>) => void;
 }
 
 export const createGarageSlice: StateCreator<
@@ -56,6 +58,7 @@ export const createGarageSlice: StateCreator<
   total: 0,
   error: null,
   selectedCar: null,
+  createForm: { text: '', color: '#ffffff' },
   trackDistance: 0,
   winner: null,
   raceStatus: 'stopped',
@@ -76,4 +79,6 @@ export const createGarageSlice: StateCreator<
   resetAllCars: async () => resetAllCarsHandle(get),
   setPage: (page) => set(() => ({ page })),
   resetWinner: () => set(() => ({ winner: null })),
+  setCreateForm: (field) =>
+    set((state) => ({ createForm: { ...state.createForm, ...field } })),
 });

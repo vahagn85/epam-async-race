@@ -2,7 +2,9 @@ import CarForm from './CarForm';
 import { useAppStore } from '../store/appStore';
 
 function CarCreateEditPanel() {
-  const { createCar, selectedCar, updateCar } = useAppStore((state) => state);
+  const { createCar, selectedCar, updateCar, createForm, setCreateForm } =
+    useAppStore();
+
   const handleCreate = (text: string, color: string) => {
     createCar({ name: text, color });
   };
@@ -15,10 +17,13 @@ function CarCreateEditPanel() {
   return (
     <div className="flex gap-4">
       <CarForm
-        initTextValue=""
-        initColorValue="#ffffff"
+        key={createForm?.id || 'create'}
+        initTextValue={createForm.text || ''}
+        initColorValue={createForm.color || '#ffffff'}
         btnName="Create"
         onSubmit={handleCreate}
+        onChangeText={(val) => setCreateForm({ text: val })}
+        onChangeColor={(val) => setCreateForm({ color: val })}
       />
       <CarForm
         key={selectedCar?.id || 'new'}

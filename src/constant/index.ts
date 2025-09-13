@@ -1,6 +1,6 @@
 export const DOMAIN = 'http://127.0.0.1:3000';
 
-export const RANDOM_CARS_COUNT = 3;
+export const RANDOM_CARS_COUNT = 100;
 
 export const STATUS_CODE = {
   BAD_REQUEST: 400,

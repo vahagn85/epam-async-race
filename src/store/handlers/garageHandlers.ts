@@ -56,6 +56,7 @@ export async function createCarHandle(
           ? [...cars]
           : [...cars, data],
       total: total + 1,
+      createForm: { id: Date.now(), text: '', color: '#ffffff' },
     });
   } catch (error) {
     set({

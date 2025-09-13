@@ -40,6 +40,12 @@ export interface CarWin {
   time: number;
 }
 
+export interface FormFields {
+  id?: number;
+  text: string;
+  color: string;
+}
+
 export interface StatusError extends Error {
   status?: number;
 }

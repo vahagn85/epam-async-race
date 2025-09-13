@@ -8,39 +8,63 @@ interface CarFormProps {
   disabled?: boolean;
   btnName: 'Create' | 'Update';
   onSubmit: (_text: string, _color: string) => void;
+  onChangeText?: (_val: string) => void;
+  onChangeColor?: (_val: string) => void;
+}
+
+function FormButton({
+  btnName,
+  disabled,
+}: {
+  btnName: 'Create' | 'Update';
+  disabled?: boolean;
+}) {
+  return (
+    <Button
+      isBtn={false}
+      name={btnName}
+      disabled={disabled}
+      className={
+        btnName === 'Create'
+          ? 'bg-green-600 hover:bg-green-800'
+          : '!bg-amber-600 hover:!bg-amber-800'
+      }
+    />
+  );
 }
 
 function CarForm(props: CarFormProps) {
   const { initTextValue, initColorValue, btnName, disabled, onSubmit } = props;
+  const { onChangeText, onChangeColor } = props;
   const [text, setText] = useState(initTextValue);
   const [color, setColor] = useState(initColorValue);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(text, color);
-    setText('');
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-1 items-center">
-      <Input type="text" value={text} onChange={setText} disabled={disabled} />
+      <Input
+        type="text"
+        value={text}
+        onChange={(v) => {
+          setText(v);
+          onChangeText?.(v);
+        }}
+        disabled={disabled}
+      />
       <Input
         type="color"
         value={color}
-        onChange={setColor}
+        onChange={(v) => {
+          setColor(v);
+          onChangeColor?.(v);
+        }}
         disabled={disabled}
       />
-
-      <Button
-        isBtn={false}
-        name={btnName}
-        disabled={disabled}
-        className={
-          btnName === 'Create'
-            ? 'bg-green-600 hover:bg-green-800'
-            : '!bg-amber-600 hover:!bg-amber-800'
-        }
-      />
+      <FormButton btnName={btnName} disabled={disabled} />
     </form>
   );
 }
