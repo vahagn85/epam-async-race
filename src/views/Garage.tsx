@@ -6,12 +6,14 @@ import { useAppStore } from '../store/appStore';
 import Heading from '../components/ui/Heading';
 import Loader from '../components/ui/Loader';
 import WinnerModal from '../components/WinnerModal';
+import ErrorMessage from '../components/ErrorMessage';
 
 function Garage() {
   const getCars = useAppStore((state) => state.getCars);
   const page = useAppStore((state) => state.page);
   const loading = useAppStore((state) => state.loading);
   const resetAllCars = useAppStore((state) => state.resetAllCars);
+  const error = useAppStore((state) => state.error);
 
   const isFirstLoad = useRef(true);
 
@@ -26,19 +28,25 @@ function Garage() {
     };
   }, [getCars, page, resetAllCars]);
 
+  function renderContent() {
+    if (isFirstLoad.current && loading) {
+      return <Loader />;
+    }
+    if (error) {
+      return <ErrorMessage msg={error} />;
+    }
+    return (
+      <>
+        <CarsControl />
+        <RaceTrack />
+        <GarageFooter />
+      </>
+    );
+  }
   return (
     <>
       <Heading>Garage</Heading>
-      {isFirstLoad.current && loading ? (
-        <Loader />
-      ) : (
-        <>
-          <CarsControl />
-          <RaceTrack />
-          <GarageFooter />
-        </>
-      )}
-
+      {renderContent()}
       <WinnerModal />
     </>
   );
